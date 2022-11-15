@@ -5,32 +5,31 @@ using UnityEngine;
 public class CreateGenerativeGraph : MonoBehaviour
 {
     public long seed;
+
     // Start is called before the first frame update
     void Start()
     {
         seed = Generate_Seed();
         Debug.Log(seed);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         
+
+
     }
 
     static long Generate_Seed(){
-        // Max Rules of between 7 and 17 currently
+        // Max Rules of between 7 and 14 currently
         System.Random rnd = new System.Random();
         int seed_bottom = 1;
         int seed_top = 10;
-        int seed_length = rnd.Next(7, 17);
-        Debug.Log(seed_length);
+        int seed_length = rnd.Next(7, 14);
 
         for(int i = 0; i < System.Math.Floor((double)(seed_length/2))-1; i++){
             seed_bottom = seed_bottom * 10;
             seed_top = seed_top * 10;
         }
         seed_top -= 1;
+
+        // Generate two halves of the seed and concatenate together
 
         int seed_first = rnd.Next(seed_bottom, seed_top);
         int seed_second = 0;
