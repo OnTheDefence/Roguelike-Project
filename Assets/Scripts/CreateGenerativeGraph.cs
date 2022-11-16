@@ -12,7 +12,7 @@ public class CreateGenerativeGraph : MonoBehaviour
         seed = Generate_Seed();
         Debug.Log(seed);
         
-
+        Graph g1 = new Graph();
 
     }
 
