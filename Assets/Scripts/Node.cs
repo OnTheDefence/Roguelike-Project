@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Node
+public class Node : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public int room_type;
+    public string entrance_direction;
+
+    public void SetRoomType(int id){
+        this.room_type = id;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void SetEntranceDirection(string direction){
+        this.entrance_direction = direction;
     }
 }
