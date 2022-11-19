@@ -11,7 +11,15 @@ public class Node : MonoBehaviour
         this.room_type = id;
     }
 
+    public int GetRoomType(){
+        return this.room_type;
+    }
+
     public void SetEntranceDirection(string direction){
         this.entrance_direction = direction;
+    }
+
+    public string GetEntranceDirection(){
+        return this.entrance_direction;
     }
 }
