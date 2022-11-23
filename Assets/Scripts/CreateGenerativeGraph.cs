@@ -5,6 +5,7 @@ using UnityEngine;
 public class CreateGenerativeGraph : MonoBehaviour
 {
     public long seed;
+    public int[] seed_arr;
 
     // Start is called before the first frame update
     void Start()
@@ -12,7 +13,11 @@ public class CreateGenerativeGraph : MonoBehaviour
         seed = Generate_Seed();
         Debug.Log(seed);
         
-        Generate_Graph(seed);
+        seed_arr = new int[seed.ToString().Length];
+        for (int i = 0; i < seed_arr.Length; i++){
+            seed_arr[i] = int.Parse(seed.ToString()[i].ToString());
+        }
+        Generate_Graph(seed_arr);
     }
 
     static long Generate_Seed(){
@@ -44,26 +49,26 @@ public class CreateGenerativeGraph : MonoBehaviour
         return seed;
     }
 
-    static void Generate_Graph(long seed){
+    static void Generate_Graph(int[] seed){
         GameObject graph = new GameObject("Level");
         GameObject start_node = new GameObject("Start Node");
         start_node.AddComponent<Node>();
         start_node.transform.parent = graph.transform; //make node a child
-        CreateNodes(start_node, int.Parse(seed.ToString()[0].ToString()));
+        CreateConnectedNodes(start_node, seed, 0);
     }
 
-    static void CreateNodes(GameObject parent, int seed_digit){
-        if(parent.name == "Start Node"){
-            parent.GetComponent<Node>().SetRoomType(-1);
+    static void CreateConnectedNodes(GameObject current_node, int[] seed, int seed_digit){
+        if(current_node.name == "Start Node"){
+            current_node.GetComponent<Node>().SetRoomType(-1);
             GameObject east_node = new GameObject("East");
             GameObject south_node = new GameObject("South");
             GameObject west_node = new GameObject("West");
 
-            switch (seed_digit){
+            switch (seed[seed_digit]){
                 case 1:
                 case 7:
                     east_node.AddComponent<Node>();
-                    east_node.transform.parent = parent.transform;
+                    east_node.transform.parent = current_node.transform;
                     east_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(east_node.name));
 
                     Destroy(south_node);
@@ -72,7 +77,7 @@ public class CreateGenerativeGraph : MonoBehaviour
                 case 2:
                 case 8:
                     south_node.AddComponent<Node>();
-                    south_node.transform.parent = parent.transform;
+                    south_node.transform.parent = current_node.transform;
                     south_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(south_node.name));
 
                     Destroy(east_node);
@@ -81,7 +86,7 @@ public class CreateGenerativeGraph : MonoBehaviour
                 case 3:
                 case 9:
                     west_node.AddComponent<Node>();
-                    west_node.transform.parent = parent.transform;
+                    west_node.transform.parent = current_node.transform;
                     west_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(west_node.name));
 
                     Destroy(east_node);
@@ -89,81 +94,124 @@ public class CreateGenerativeGraph : MonoBehaviour
                     break;
                 case 4:
                     east_node.AddComponent<Node>();
-                    east_node.transform.parent = parent.transform;
+                    east_node.transform.parent = current_node.transform;
                     east_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(east_node.name));
                     
                     south_node.AddComponent<Node>();
-                    south_node.transform.parent = parent.transform;
+                    south_node.transform.parent = current_node.transform;
                     south_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(south_node.name));
 
                     Destroy(west_node);
                     break;
                 case 5:
                     south_node.AddComponent<Node>();
-                    south_node.transform.parent = parent.transform;
+                    south_node.transform.parent = current_node.transform;
                     south_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(south_node.name));
 
                     west_node.AddComponent<Node>();
-                    west_node.transform.parent = parent.transform;
+                    west_node.transform.parent = current_node.transform;
                     west_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(west_node.name));
 
                     Destroy(east_node);
                     break;
                 case 6:
                     east_node.AddComponent<Node>();
-                    east_node.transform.parent = parent.transform;
+                    east_node.transform.parent = current_node.transform;
                     east_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(east_node.name));
 
                     south_node.AddComponent<Node>();
-                    south_node.transform.parent = parent.transform;
+                    south_node.transform.parent = current_node.transform;
                     south_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(south_node.name));
 
                     west_node.AddComponent<Node>();
-                    west_node.transform.parent = parent.transform;
+                    west_node.transform.parent = current_node.transform;
                     west_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(west_node.name));
                     break;
             }
 
         } else if(seed_digit == 0){
 
-            parent.GetComponent<Node>().SetRoomType(0);
+            current_node.GetComponent<Node>().SetRoomType(0);
 
         } else if(seed_digit == 4){
             
-            parent.GetComponent<Node>().SetRoomType(4);
+            current_node.GetComponent<Node>().SetRoomType(4);
         
         } else if(seed_digit == 8){
         
-            parent.GetComponent<Node>().SetRoomType(5);
+            current_node.GetComponent<Node>().SetRoomType(5);
         
         } else if(seed_digit % 4 == 1){
-            GameObject node = new GameObject();
-            parent.GetComponent<Node>().SetRoomType(1);
 
-            switch (seed_digit){
-                case 1:
-                    node.name = LeftDirection(OppositeDirection(parent.name));
-                    node.AddComponent<Node>();
-                    node.transform.parent = parent.transform;
-                    node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node.name));
-                    break;
-                case 5:
-                    node.name = OppositeDirection(parent.name);
-                    break;
-                case 9:
-                    node.name = RightDirection(parent.name);
-                    break;
+            GameObject node = new GameObject();
+
+            current_node.GetComponent<Node>().SetRoomType(1);
+
+            if (seed[seed_digit] == 1 && seed[seed_digit-1] < 7){ 
+                node.name = LeftDirection(current_node.name);
+            } else if ((seed[seed_digit] == 1 && seed[seed_digit-1] >= 7) | (seed[seed_digit] == 5 && seed[seed_digit-1] <= 3)){
+                node.name = current_node.name;
+            } else{
+                node.name = RightDirection(current_node.name);
             }
+
+            node.AddComponent<Node>();
+            node.transform.parent = current_node.transform;
+            node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node.name));
         
         } else if(seed_digit % 4 == 2){
         
-            parent.GetComponent<Node>().SetRoomType(2);
+            current_node.GetComponent<Node>().SetRoomType(2);
+
+            GameObject node1 = new GameObject();
+            GameObject node2 = new GameObject();
+
+            if (seed[seed_digit] == 2 && seed[seed_digit-1] < 7){ 
+                node1.name = LeftDirection(current_node.name);
+                node2.name = current_node.name;
+            } else if ((seed[seed_digit] == 2 && seed[seed_digit-1] >= 7) | (seed[seed_digit] == 6 && seed[seed_digit-1] <= 3)){
+                node1.name = current_node.name;
+                node2.name = RightDirection(current_node.name);
+            } else{
+                node1.name = LeftDirection(current_node.name);
+                node2.name = RightDirection(current_node.name);
+            }
+
+            node1.AddComponent<Node>();
+            node1.transform.parent = current_node.transform;
+            node1.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node1.name));
+
+            node2.AddComponent<Node>();
+            node2.transform.parent = current_node.transform;
+            node2.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node2.name));           
         
+
         } else if(seed_digit % 4 == 3){
+
+            GameObject node1 = new GameObject();
+            GameObject node2 = new GameObject();
+            GameObject node3 = new GameObject();
         
-            parent.GetComponent<Node>().SetRoomType(3);
+            current_node.GetComponent<Node>().SetRoomType(3);
+
+            node1.AddComponent<Node>();
+            node1.name = LeftDirection(current_node.name);
+            node1.transform.parent = current_node.transform;
+            node1.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node1.name));
+
+            node2.AddComponent<Node>();
+            node2.name = current_node.name;
+            node2.transform.parent = current_node.transform;
+            node2.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node1.name));
+
+            node3.AddComponent<Node>();
+            node3.name = RightDirection(current_node.name);
+            node3.transform.parent = current_node.transform;
+            node3.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node1.name));
         
         }
+
+        current_node.GetComponent<Node>().SetAssignedSeedDigit(seed[seed_digit]);
     }
 
     static string OppositeDirection(string original_direction){
@@ -181,7 +229,7 @@ public class CreateGenerativeGraph : MonoBehaviour
         }
     }
 
-    static string LeftDirection(string original_direction){
+    static string RightDirection(string original_direction){
         switch(original_direction){
             case "North":
                 return "East";
@@ -196,7 +244,7 @@ public class CreateGenerativeGraph : MonoBehaviour
         }
     }
 
-    static string RightDirection(string original_direction){
+    static string LeftDirection(string original_direction){
         switch(original_direction){
             case "North":
                 return "West";

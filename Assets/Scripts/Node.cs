@@ -6,6 +6,7 @@ public class Node : MonoBehaviour
 {
     public int room_type;
     public string entrance_direction;
+    public int assigned_seed_digit;
 
     public void SetRoomType(int id){
         this.room_type = id;
@@ -21,5 +22,13 @@ public class Node : MonoBehaviour
 
     public string GetEntranceDirection(){
         return this.entrance_direction;
+    }
+
+    public void SetAssignedSeedDigit(int seed_digit){
+        this.assigned_seed_digit = seed_digit;
+    }
+
+    public int GetAssignedSeedDigit(int seed_digit){
+        return this.assigned_seed_digit;
     }
 }
