@@ -54,10 +54,14 @@ public class CreateGenerativeGraph : MonoBehaviour
         GameObject start_node = new GameObject("Start Node");
         start_node.AddComponent<Node>();
         start_node.transform.parent = graph.transform; //make node a child
-        CreateConnectedNodes(start_node, seed, 0);
+        List<GameObject> nodes = new List<GameObject>();
+        nodes.Add(start_node);
+        for(int i = 0; i < seed.Length; i++){
+            nodes = CreateConnectedNodes(nodes[0], seed, i, nodes);
+        }
     }
 
-    static void CreateConnectedNodes(GameObject current_node, int[] seed, int seed_digit){
+    static List<GameObject> CreateConnectedNodes(GameObject current_node, int[] seed, int seed_digit, List<GameObject> nodes){
         if(current_node.name == "Start Node"){
             current_node.GetComponent<Node>().SetRoomType(-1);
             GameObject east_node = new GameObject("East");
@@ -71,6 +75,8 @@ public class CreateGenerativeGraph : MonoBehaviour
                     east_node.transform.parent = current_node.transform;
                     east_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(east_node.name));
 
+                    nodes.Add(east_node);
+
                     Destroy(south_node);
                     Destroy(west_node);
                     break;
@@ -79,6 +85,8 @@ public class CreateGenerativeGraph : MonoBehaviour
                     south_node.AddComponent<Node>();
                     south_node.transform.parent = current_node.transform;
                     south_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(south_node.name));
+
+                    nodes.Add(south_node);
 
                     Destroy(east_node);
                     Destroy(west_node);
@@ -89,6 +97,8 @@ public class CreateGenerativeGraph : MonoBehaviour
                     west_node.transform.parent = current_node.transform;
                     west_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(west_node.name));
 
+                    nodes.Add(west_node);
+
                     Destroy(east_node);
                     Destroy(south_node);
                     break;
@@ -96,10 +106,14 @@ public class CreateGenerativeGraph : MonoBehaviour
                     east_node.AddComponent<Node>();
                     east_node.transform.parent = current_node.transform;
                     east_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(east_node.name));
+
+                    nodes.Add(east_node);
                     
                     south_node.AddComponent<Node>();
                     south_node.transform.parent = current_node.transform;
                     south_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(south_node.name));
+
+                    nodes.Add(south_node);
 
                     Destroy(west_node);
                     break;
@@ -108,9 +122,13 @@ public class CreateGenerativeGraph : MonoBehaviour
                     south_node.transform.parent = current_node.transform;
                     south_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(south_node.name));
 
+                    nodes.Add(south_node);
+
                     west_node.AddComponent<Node>();
                     west_node.transform.parent = current_node.transform;
                     west_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(west_node.name));
+
+                    nodes.Add(west_node);
 
                     Destroy(east_node);
                     break;
@@ -119,13 +137,19 @@ public class CreateGenerativeGraph : MonoBehaviour
                     east_node.transform.parent = current_node.transform;
                     east_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(east_node.name));
 
+                    nodes.Add(east_node);
+
                     south_node.AddComponent<Node>();
                     south_node.transform.parent = current_node.transform;
                     south_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(south_node.name));
 
+                    nodes.Add(south_node);
+
                     west_node.AddComponent<Node>();
                     west_node.transform.parent = current_node.transform;
                     west_node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(west_node.name));
+
+                    nodes.Add(west_node);
                     break;
             }
 
@@ -155,9 +179,23 @@ public class CreateGenerativeGraph : MonoBehaviour
                 node.name = RightDirection(current_node.name);
             }
 
-            node.AddComponent<Node>();
-            node.transform.parent = current_node.transform;
-            node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node.name));
+            if (seed_digit < 2){
+                node.AddComponent<Node>();
+                node.transform.parent = current_node.transform;
+                node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node.name));
+
+                nodes.Add(node);
+            } else{
+                if (CheckParents(node, node.transform.parent.gameObject, node.transform.parent.transform.parent.gameObject) == true){
+                    node.AddComponent<Node>();
+                    node.transform.parent = current_node.transform;
+                    node.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node.name));
+
+                    nodes.Add(node);
+                } else{
+
+                }
+            }
         
         } else if(seed_digit % 4 == 2){
         
@@ -181,9 +219,13 @@ public class CreateGenerativeGraph : MonoBehaviour
             node1.transform.parent = current_node.transform;
             node1.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node1.name));
 
+            nodes.Add(node1);
+
             node2.AddComponent<Node>();
             node2.transform.parent = current_node.transform;
-            node2.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node2.name));           
+            node2.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node2.name));        
+
+            nodes.Add(node2);   
         
 
         } else if(seed_digit % 4 == 3){
@@ -199,19 +241,29 @@ public class CreateGenerativeGraph : MonoBehaviour
             node1.transform.parent = current_node.transform;
             node1.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node1.name));
 
+            nodes.Add(node1);
+
             node2.AddComponent<Node>();
             node2.name = current_node.name;
             node2.transform.parent = current_node.transform;
             node2.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node1.name));
 
+            nodes.Add(node2);
+
             node3.AddComponent<Node>();
             node3.name = RightDirection(current_node.name);
             node3.transform.parent = current_node.transform;
             node3.GetComponent<Node>().SetEntranceDirection(OppositeDirection(node1.name));
+
+            nodes.Add(node3);
         
         }
 
         current_node.GetComponent<Node>().SetAssignedSeedDigit(seed[seed_digit]);
+
+        nodes.RemoveAt(0);
+
+        return nodes;
     }
 
     static string OppositeDirection(string original_direction){
@@ -257,6 +309,10 @@ public class CreateGenerativeGraph : MonoBehaviour
             default:
                 return "";
         }
+    }
+
+    static bool CheckParents(GameObject current, GameObject parent, GameObject grandparent){
+        return true;
     }
 
 }

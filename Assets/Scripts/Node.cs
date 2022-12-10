@@ -6,6 +6,10 @@ public class Node : MonoBehaviour
 {
     public int room_type;
     public string entrance_direction;
+    public GameObject north_exit = null;
+    public GameObject east_exit = null;
+    public GameObject south_exit = null;
+    public GameObject west_exit = null;
     public int assigned_seed_digit;
 
     public void SetRoomType(int id){
