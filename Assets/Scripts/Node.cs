@@ -4,13 +4,31 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
+    public string node_name;
+    public int[] coordinates = null;
     public int room_type;
-    public string entrance_direction;
+    public GameObject entrance = null;
     public GameObject north_exit = null;
     public GameObject east_exit = null;
     public GameObject south_exit = null;
     public GameObject west_exit = null;
     public int assigned_seed_digit;
+
+    public void SetName(string name){
+        this.node_name = name;
+    }
+
+    public string GetName(){
+        return this.node_name;
+    }
+
+    public void SetCoordinates(int x, int y){
+        this.coordinates = new int[]{x,y};
+    }
+
+    public int[] GetCoordinates(){
+        return this.coordinates;
+    }
 
     public void SetRoomType(int id){
         this.room_type = id;
@@ -20,12 +38,21 @@ public class Node : MonoBehaviour
         return this.room_type;
     }
 
-    public void SetEntranceDirection(string direction){
-        this.entrance_direction = direction;
+    public void SetEntrance(GameObject entrance){
+        this.entrance = entrance;
+        SetExit(entrance, OppositeDirection(this.node_name));
     }
 
-    public string GetEntranceDirection(){
-        return this.entrance_direction;
+    public GameObject GetEntrance(){
+        return this.entrance;
+    }
+
+    public bool IsEntrance(){
+        if (this.entrance == null){
+            return false;
+        }
+
+        return true;
     }
 
     public void SetAssignedSeedDigit(int seed_digit){
@@ -34,5 +61,84 @@ public class Node : MonoBehaviour
 
     public int GetAssignedSeedDigit(int seed_digit){
         return this.assigned_seed_digit;
+    }
+
+    public void SetNorthExit(GameObject exit){
+        this.north_exit = exit;
+    }
+
+    public GameObject GetNorthExit(){
+        return this.north_exit;
+    }
+
+    public void SetEastExit(GameObject exit){
+        this.east_exit = exit;
+    }
+
+    public GameObject GetEastExit(){
+        return this.east_exit;
+    }
+
+    public void SetSouthExit(GameObject exit){
+        this.south_exit = exit;
+    }
+
+    public GameObject GetSouthExit(){
+        return this.south_exit;
+    }
+
+    public void SetWestExit(GameObject exit){
+        this.west_exit = exit;
+    }
+
+    public GameObject GetWestExit(){
+        return this.west_exit;
+    }
+
+    public void SetExit(GameObject exit, string direction){
+        switch (direction){
+            case "North":
+                SetNorthExit(exit);
+                break;
+            case "East":
+                SetEastExit(exit);
+                break;
+            case "South":
+                SetSouthExit(exit);
+                break;
+            case "West":
+                SetWestExit(exit);
+                break;
+        }
+    }
+
+    public GameObject GetExit(string direction){
+        switch (direction){
+            case "North":
+                return GetNorthExit();
+            case "East":
+                return GetEastExit();
+            case "South":
+                return GetSouthExit();
+            case "West":
+                return GetWestExit();
+            default:
+                return null;
+        }
+    }
+
+    static string OppositeDirection(string original_direction){
+        switch(original_direction){
+            case "North":
+                return "South";
+            case "East":
+                return "West";
+            case "South":
+                return "North";
+            case "West":
+                return "East";
+            default:
+                return "";
+        }
     }
 }
