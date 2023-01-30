@@ -69,12 +69,12 @@ public class CreateGenerativeGraph : MonoBehaviour
         start_node.GetComponent<Node>().SetCoordinates(9,9);
 
         for(int i = 0; i < seed.Length; i++){
-            nodes = CreateConnectedNodes(nodes[0], seed, i, nodes, map);
+            nodes = CreateConnectedNodes(nodes[0], seed, i, nodes, all_nodes, map);
         }
 
     }
 
-    static List<GameObject> CreateConnectedNodes(GameObject current_node, int[] seed, int seed_digit, List<GameObject> nodes, GameObject[,] map){
+    static List<GameObject> CreateConnectedNodes(GameObject current_node, int[] seed, int seed_digit, List<GameObject> nodes, List<GameObject> all_nodes, GameObject[,] map){
         Debug.Log(seed[seed_digit]);
         if(current_node.name == "Start Node"){
             current_node.GetComponent<Node>().SetRoomType(-1);
