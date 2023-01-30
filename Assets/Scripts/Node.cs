@@ -38,9 +38,9 @@ public class Node : MonoBehaviour
         return this.room_type;
     }
 
-    public void SetEntrance(GameObject entrance){
+    public void SetEntrance(GameObject entrance, string direction){
         this.entrance = entrance;
-        SetExit(entrance, OppositeDirection(this.node_name));
+        SetExit(this.entrance, direction);
     }
 
     public GameObject GetEntrance(){

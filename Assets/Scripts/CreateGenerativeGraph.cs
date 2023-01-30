@@ -21,7 +21,7 @@ public class CreateGenerativeGraph : MonoBehaviour
         Generate_Graph(seed_arr);
     }
 
-    static long Generate_Seed(){
+    long Generate_Seed(){
         // Max Rules of between 7 and 14 currently
         System.Random rnd = new System.Random();
         int seed_bottom = 1;
@@ -50,12 +50,13 @@ public class CreateGenerativeGraph : MonoBehaviour
         return seed;
     }
 
-    static void Generate_Graph(int[] seed){
+    void Generate_Graph(int[] seed){
         GameObject graph = new GameObject("Level");
         GameObject start_node = new GameObject("Start Node");
 
         start_node.AddComponent<Node>();
         start_node.transform.parent = graph.transform; //make node a child
+
 
         List<GameObject> nodes = new List<GameObject>();
         nodes.Add(start_node);
@@ -68,19 +69,30 @@ public class CreateGenerativeGraph : MonoBehaviour
 
         start_node.GetComponent<Node>().SetCoordinates(9,9);
 
+
         for(int i = 0; i < seed.Length; i++){
             nodes = CreateConnectedNodes(nodes[0], seed, i, nodes, all_nodes, map);
         }
 
+        for(int i = 0; i < all_nodes.Count; i++){
+            GenerateSprites(all_nodes[i]);
+        }
+
     }
 
-    static List<GameObject> CreateConnectedNodes(GameObject current_node, int[] seed, int seed_digit, List<GameObject> nodes, List<GameObject> all_nodes, GameObject[,] map){
+    List<GameObject> CreateConnectedNodes(GameObject current_node, int[] seed, int seed_digit, List<GameObject> nodes, List<GameObject> all_nodes, GameObject[,] map){
         Debug.Log(seed[seed_digit]);
+        int map_offset_multiplier = 32;
+
         if(current_node.name == "Start Node"){
             current_node.GetComponent<Node>().SetRoomType(-1);
             GameObject east_node = new GameObject("East");
             GameObject south_node = new GameObject("South");
             GameObject west_node = new GameObject("West");
+
+            east_node.transform.position = current_node.transform.position;
+            south_node.transform.position = current_node.transform.position;
+            west_node.transform.position = current_node.transform.position;
 
             switch (seed[seed_digit]){
                 case 1:
@@ -88,12 +100,14 @@ public class CreateGenerativeGraph : MonoBehaviour
                     east_node.AddComponent<Node>();
                     east_node.transform.parent = current_node.transform;
                     east_node.GetComponent<Node>().SetName(east_node.name);
-                    east_node.GetComponent<Node>().SetEntrance(current_node);                    
+                    east_node.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(east_node.name));                   
 
                     current_node.GetComponent<Node>().SetExit(east_node, east_node.name);
 
                     SetCoordinates(current_node, east_node, "East");
                     map[east_node.GetComponent<Node>().GetCoordinates()[1], east_node.GetComponent<Node>().GetCoordinates()[0]] = east_node;
+
+                    east_node.transform.position = new Vector3(0,0,0) + new Vector3((east_node.GetComponent<Node>().GetCoordinates()[0] - current_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (east_node.GetComponent<Node>().GetCoordinates()[1] - current_node.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier,0);
 
                     nodes.Add(east_node);
                     all_nodes.Add(east_node);
@@ -106,12 +120,14 @@ public class CreateGenerativeGraph : MonoBehaviour
                     south_node.AddComponent<Node>();
                     south_node.transform.parent = current_node.transform;
                     south_node.GetComponent<Node>().SetName(south_node.name);
-                    south_node.GetComponent<Node>().SetEntrance(current_node);
+                    south_node.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(south_node.name));
 
                     current_node.GetComponent<Node>().SetExit(south_node, south_node.name);
 
                     SetCoordinates(current_node, south_node, "South");
                     map[south_node.GetComponent<Node>().GetCoordinates()[1], south_node.GetComponent<Node>().GetCoordinates()[0]] = south_node;
+
+                    south_node.transform.position = new Vector3(0,0,0) + new Vector3((current_node.GetComponent<Node>().GetCoordinates()[0] - south_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (current_node.GetComponent<Node>().GetCoordinates()[1] - south_node.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier, 0);
 
                     nodes.Add(south_node);
                     all_nodes.Add(south_node);                    
@@ -124,13 +140,15 @@ public class CreateGenerativeGraph : MonoBehaviour
                     west_node.AddComponent<Node>();
                     west_node.transform.parent = current_node.transform;
                     west_node.GetComponent<Node>().SetName(west_node.name);
-                    west_node.GetComponent<Node>().SetEntrance(current_node);
+                    west_node.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(west_node.name));
 
                     current_node.GetComponent<Node>().SetExit(west_node, west_node.name);
 
                     SetCoordinates(current_node, west_node, "West");
                     map[west_node.GetComponent<Node>().GetCoordinates()[1], west_node.GetComponent<Node>().GetCoordinates()[0]] = west_node;
 
+                    west_node.transform.position = new Vector3(0,0,0) + new Vector3((west_node.GetComponent<Node>().GetCoordinates()[0] - current_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (west_node.GetComponent<Node>().GetCoordinates()[1] - current_node.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier, 0);
+                    
                     nodes.Add(west_node);
                     all_nodes.Add(west_node); 
 
@@ -141,26 +159,30 @@ public class CreateGenerativeGraph : MonoBehaviour
                     east_node.AddComponent<Node>();
                     east_node.transform.parent = current_node.transform;
                     east_node.GetComponent<Node>().SetName(east_node.name);
-                    east_node.GetComponent<Node>().SetEntrance(current_node);
+                    east_node.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(east_node.name));
 
                     current_node.GetComponent<Node>().SetExit(east_node, east_node.name);
 
                     SetCoordinates(current_node, east_node, "East");
                     map[east_node.GetComponent<Node>().GetCoordinates()[1], east_node.GetComponent<Node>().GetCoordinates()[0]] = east_node;
 
+                    east_node.transform.position = new Vector3(0,0,0) + new Vector3((east_node.GetComponent<Node>().GetCoordinates()[0] - current_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (east_node.GetComponent<Node>().GetCoordinates()[1] - current_node.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier,0);
+                    
                     nodes.Add(east_node);
                     all_nodes.Add(east_node); 
                     
                     south_node.AddComponent<Node>();
                     south_node.transform.parent = current_node.transform;
                     south_node.GetComponent<Node>().SetName(south_node.name);
-                    south_node.GetComponent<Node>().SetEntrance(current_node);                    
+                    south_node.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(south_node.name));                    
 
                     current_node.GetComponent<Node>().SetExit(south_node, south_node.name);
 
                     SetCoordinates(current_node, south_node, "South");
                     map[south_node.GetComponent<Node>().GetCoordinates()[1], south_node.GetComponent<Node>().GetCoordinates()[0]] = south_node;
 
+                    south_node.transform.position = new Vector3(0,0,0) + new Vector3((current_node.GetComponent<Node>().GetCoordinates()[0] - south_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (current_node.GetComponent<Node>().GetCoordinates()[1] - south_node.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier,0);
+                    
                     nodes.Add(south_node);
                     all_nodes.Add(south_node); 
 
@@ -170,25 +192,30 @@ public class CreateGenerativeGraph : MonoBehaviour
                     south_node.AddComponent<Node>();
                     south_node.transform.parent = current_node.transform;
                     south_node.GetComponent<Node>().SetName(south_node.name);
-                    south_node.GetComponent<Node>().SetEntrance(current_node);                    
+                    south_node.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(south_node.name));                     
 
                     current_node.GetComponent<Node>().SetExit(south_node, south_node.name);
 
                     SetCoordinates(current_node, south_node, "South");
                     map[south_node.GetComponent<Node>().GetCoordinates()[1], south_node.GetComponent<Node>().GetCoordinates()[0]] = south_node;
 
+                    south_node.transform.position = new Vector3(0,0,0) + new Vector3((current_node.GetComponent<Node>().GetCoordinates()[0] - south_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (current_node.GetComponent<Node>().GetCoordinates()[1] - south_node.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier,0);
+                    
                     nodes.Add(south_node);
                     all_nodes.Add(south_node); 
 
                     west_node.AddComponent<Node>();
                     west_node.transform.parent = current_node.transform;
                     west_node.GetComponent<Node>().SetName(west_node.name);
-                    west_node.GetComponent<Node>().SetEntrance(current_node);                    
+                    west_node.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(west_node.name));                   
 
                     current_node.GetComponent<Node>().SetExit(west_node, west_node.name);
 
                     SetCoordinates(current_node, west_node, "West");
                     map[west_node.GetComponent<Node>().GetCoordinates()[1], west_node.GetComponent<Node>().GetCoordinates()[0]] = west_node;
+
+                    west_node.transform.position = new Vector3(0,0,0) + new Vector3((west_node.GetComponent<Node>().GetCoordinates()[0] - current_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (west_node.GetComponent<Node>().GetCoordinates()[1] - current_node.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier, 0);
+                    
 
                     nodes.Add(west_node);
                     all_nodes.Add(west_node); 
@@ -199,39 +226,45 @@ public class CreateGenerativeGraph : MonoBehaviour
                     east_node.AddComponent<Node>();
                     east_node.transform.parent = current_node.transform;
                     east_node.GetComponent<Node>().SetName(east_node.name);
-                    east_node.GetComponent<Node>().SetEntrance(current_node);                    
+                    east_node.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(east_node.name));  
 
                     current_node.GetComponent<Node>().SetExit(east_node, east_node.name);
 
                     SetCoordinates(current_node, east_node, "East");
                     map[east_node.GetComponent<Node>().GetCoordinates()[1], east_node.GetComponent<Node>().GetCoordinates()[0]] = east_node;
 
+                    east_node.transform.position = new Vector3(0,0,0) + new Vector3((east_node.GetComponent<Node>().GetCoordinates()[0] - current_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (east_node.GetComponent<Node>().GetCoordinates()[1] - current_node.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier,0);
+                    
                     nodes.Add(east_node);
                     all_nodes.Add(east_node); 
 
                     south_node.AddComponent<Node>();
                     south_node.transform.parent = current_node.transform;
                     south_node.GetComponent<Node>().SetName(south_node.name);
-                    south_node.GetComponent<Node>().SetEntrance(current_node);
+                    south_node.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(south_node.name));
 
                     current_node.GetComponent<Node>().SetExit(south_node, south_node.name);
 
                     SetCoordinates(current_node, south_node, "South");
                     map[south_node.GetComponent<Node>().GetCoordinates()[1], south_node.GetComponent<Node>().GetCoordinates()[0]] = south_node;
 
+                    south_node.transform.position = new Vector3(0,0,0) + new Vector3((current_node.GetComponent<Node>().GetCoordinates()[0] - south_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (current_node.GetComponent<Node>().GetCoordinates()[1] - south_node.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier,0);
+                    
                     nodes.Add(south_node);
                     all_nodes.Add(south_node); 
 
                     west_node.AddComponent<Node>();
                     west_node.transform.parent = current_node.transform;
                     west_node.GetComponent<Node>().SetName(west_node.name);
-                    west_node.GetComponent<Node>().SetEntrance(current_node);
+                    west_node.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(west_node.name));
 
                     current_node.GetComponent<Node>().SetExit(west_node, west_node.name);
 
                     SetCoordinates(current_node, west_node, "West");
                     map[west_node.GetComponent<Node>().GetCoordinates()[1], west_node.GetComponent<Node>().GetCoordinates()[0]] = west_node;
-                    
+
+                    west_node.transform.position = new Vector3(0,0,0) + new Vector3((west_node.GetComponent<Node>().GetCoordinates()[0] - current_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (west_node.GetComponent<Node>().GetCoordinates()[1] - current_node.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier, 0);
+                                        
                     nodes.Add(west_node);
                     all_nodes.Add(west_node); 
                     break;
@@ -253,6 +286,7 @@ public class CreateGenerativeGraph : MonoBehaviour
         } else if(seed_digit % 4 == 1){
 
             GameObject node = new GameObject();
+            node.transform.position = current_node.transform.position;
 
             current_node.GetComponent<Node>().SetRoomType(1);
 
@@ -270,10 +304,12 @@ public class CreateGenerativeGraph : MonoBehaviour
             if (map[node.GetComponent<Node>().GetCoordinates()[1], node.GetComponent<Node>().GetCoordinates()[0]] != null){
                 Destroy(node);
             } else {
-                map[node.GetComponent<Node>().GetCoordinates()[1], node.GetComponent<Node>().GetCoordinates()[0]] = node;
+                map[node.GetComponent<Node>().GetCoordinates()[1], node.GetComponent<Node>().GetCoordinates()[0]] = node;                
                 
                 node.transform.parent = current_node.transform;
-                node.GetComponent<Node>().SetEntrance(current_node);
+                node.transform.localPosition = new Vector3(0,0,0) + new Vector3((node.GetComponent<Node>().GetCoordinates()[0] - current_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (current_node.GetComponent<Node>().GetCoordinates()[1] - node.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier, 0);
+                
+                node.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(node.name));
 
                 current_node.GetComponent<Node>().SetExit(node, node.name);
 
@@ -288,6 +324,9 @@ public class CreateGenerativeGraph : MonoBehaviour
 
             GameObject node1 = new GameObject();
             GameObject node2 = new GameObject();
+
+            node1.transform.position = current_node.transform.position;
+            node2.transform.position = current_node.transform.position;
 
             if (seed[seed_digit] == 2 && seed[seed_digit-1] < 7){ 
                 node1.name = LeftDirection(current_node.name);
@@ -307,9 +346,11 @@ public class CreateGenerativeGraph : MonoBehaviour
                 Destroy(node1);
             } else {
                 map[node1.GetComponent<Node>().GetCoordinates()[1], node1.GetComponent<Node>().GetCoordinates()[0]] = node1;
-                
+                                
                 node1.transform.parent = current_node.transform;
-                node1.GetComponent<Node>().SetEntrance(current_node);
+                node1.transform.localPosition = new Vector3(0,0,0) + new Vector3((node1.GetComponent<Node>().GetCoordinates()[0] - current_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (current_node.GetComponent<Node>().GetCoordinates()[1] - node1.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier, 0);
+                
+                node1.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(node1.name));
 
                 current_node.GetComponent<Node>().SetExit(node1, node1.name);
 
@@ -324,9 +365,11 @@ public class CreateGenerativeGraph : MonoBehaviour
                 Destroy(node2);
             } else {
                 map[node2.GetComponent<Node>().GetCoordinates()[1], node2.GetComponent<Node>().GetCoordinates()[0]] = node2;
-                
+                                
                 node2.transform.parent = current_node.transform;
-                node2.GetComponent<Node>().SetEntrance(current_node);
+                node2.transform.localPosition = new Vector3(0,0,0) + new Vector3((node2.GetComponent<Node>().GetCoordinates()[0] - current_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (current_node.GetComponent<Node>().GetCoordinates()[1] - node2.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier, 0);
+                
+                node2.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(node2.name)); 
 
                 current_node.GetComponent<Node>().SetExit(node2, node2.name);
 
@@ -339,6 +382,10 @@ public class CreateGenerativeGraph : MonoBehaviour
             GameObject node1 = new GameObject();
             GameObject node2 = new GameObject();
             GameObject node3 = new GameObject();
+
+            node1.transform.position = current_node.transform.position;
+            node2.transform.position = current_node.transform.position;
+            node3.transform.position = current_node.transform.position;
         
             current_node.GetComponent<Node>().SetRoomType(3);
 
@@ -353,9 +400,11 @@ public class CreateGenerativeGraph : MonoBehaviour
                 Destroy(node1);
             } else {
                 map[node1.GetComponent<Node>().GetCoordinates()[1], node1.GetComponent<Node>().GetCoordinates()[0]] = node1;
-                
+                                
                 node1.transform.parent = current_node.transform;
-                node1.GetComponent<Node>().SetEntrance(current_node);
+                node1.transform.localPosition = new Vector3(0,0,0) + new Vector3((node1.GetComponent<Node>().GetCoordinates()[0] - current_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (current_node.GetComponent<Node>().GetCoordinates()[1] - node1.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier, 0);
+
+                node1.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(node1.name));
 
                 current_node.GetComponent<Node>().SetExit(node1, node1.name);
 
@@ -370,9 +419,11 @@ public class CreateGenerativeGraph : MonoBehaviour
                 Destroy(node2);
             } else {
                 map[node2.GetComponent<Node>().GetCoordinates()[1], node2.GetComponent<Node>().GetCoordinates()[0]] = node2;
-                
+                                
                 node2.transform.parent = current_node.transform;
-                node2.GetComponent<Node>().SetEntrance(current_node);
+                node2.transform.localPosition = new Vector3(0,0,0) + new Vector3((node2.GetComponent<Node>().GetCoordinates()[0] - current_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (current_node.GetComponent<Node>().GetCoordinates()[1] - node2.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier, 0);
+
+                node2.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(node2.name));
 
                 current_node.GetComponent<Node>().SetExit(node2, node2.name);
 
@@ -389,7 +440,9 @@ public class CreateGenerativeGraph : MonoBehaviour
                 map[node3.GetComponent<Node>().GetCoordinates()[1], node3.GetComponent<Node>().GetCoordinates()[0]] = node3;
                 
                 node3.transform.parent = current_node.transform;
-                node3.GetComponent<Node>().SetEntrance(current_node);
+                node3.transform.localPosition = new Vector3(0,0,0) + new Vector3((node3.GetComponent<Node>().GetCoordinates()[0] - current_node.GetComponent<Node>().GetCoordinates()[0]) * map_offset_multiplier, (current_node.GetComponent<Node>().GetCoordinates()[1] - node3.GetComponent<Node>().GetCoordinates()[1]) * map_offset_multiplier, 0);
+
+                node3.GetComponent<Node>().SetEntrance(current_node, OppositeDirection(node3.name));
 
                 current_node.GetComponent<Node>().SetExit(node3, node3.name);
 
@@ -404,6 +457,10 @@ public class CreateGenerativeGraph : MonoBehaviour
         nodes.RemoveAt(0);
 
         return nodes;
+    }
+
+    void GenerateSprites(GameObject current_node){
+        GetComponent<CreateMapSprites>().Generate(current_node);
     }
 
     static string OppositeDirection(string original_direction){
