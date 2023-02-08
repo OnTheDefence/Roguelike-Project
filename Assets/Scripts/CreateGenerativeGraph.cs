@@ -454,6 +454,10 @@ public class CreateGenerativeGraph : MonoBehaviour
 
         current_node.GetComponent<Node>().SetAssignedSeedDigit(seed[seed_digit]);
 
+        if (seed_digit == (seed.Length - 1)){
+            current_node.GetComponent<Node>().SetRoomType(9);
+        }
+
         nodes.RemoveAt(0);
 
         return nodes;

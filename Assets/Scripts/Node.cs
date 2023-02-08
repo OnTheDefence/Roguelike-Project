@@ -12,6 +12,7 @@ public class Node : MonoBehaviour
     public GameObject east_exit = null;
     public GameObject south_exit = null;
     public GameObject west_exit = null;
+    public bool room_defeated = false;
     public int assigned_seed_digit;
 
     public void SetName(string name){
@@ -20,6 +21,10 @@ public class Node : MonoBehaviour
 
     public string GetName(){
         return this.node_name;
+    }
+
+    public void CompleteRoom(){
+        this.room_defeated = true;
     }
 
     public void SetCoordinates(int x, int y){
