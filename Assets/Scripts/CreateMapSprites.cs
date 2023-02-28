@@ -5,7 +5,6 @@ using UnityEngine;
 public class CreateMapSprites : MonoBehaviour
 {
     public void Generate(GameObject current_node){
-        Debug.Log(current_node);
 
         Node node = current_node.GetComponent<Node>();
         Vector3 scale_vector = new Vector3((float)1.7,(float)1.7,1);

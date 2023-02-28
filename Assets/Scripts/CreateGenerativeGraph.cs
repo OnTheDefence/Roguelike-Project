@@ -11,7 +11,6 @@ public class CreateGenerativeGraph : MonoBehaviour
     void Start()
     {
         seed = Generate_Seed();
-        Debug.Log(seed);
         
         seed_arr = new int[seed.ToString().Length];
         for (int i = 0; i < seed_arr.Length; i++){
@@ -81,7 +80,6 @@ public class CreateGenerativeGraph : MonoBehaviour
     }
 
     List<GameObject> CreateConnectedNodes(GameObject current_node, int[] seed, int seed_digit, List<GameObject> nodes, List<GameObject> all_nodes, GameObject[,] map){
-        Debug.Log(seed[seed_digit]);
         int map_offset_multiplier = 32;
 
         if(current_node.name == "Start Node"){
