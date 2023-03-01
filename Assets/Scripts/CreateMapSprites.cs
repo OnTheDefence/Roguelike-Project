@@ -127,16 +127,6 @@ public class CreateMapSprites : MonoBehaviour
             west_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Walls_west");
         }
 
-
-        // GameObject map_skeleton = new GameObject("map_skeleton");
-        // map_skeleton.transform.position = sprites.transform.position + new Vector3(0,0,1);
-        // map_skeleton.transform.parent = sprites.transform;
-        // map_skeleton.transform.localScale = scale_vector;
-        // map_skeleton.AddComponent<SpriteRenderer>();
-        // map_skeleton.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Skeleton Map");
-        // map_skeleton.AddComponent<BoxCollider2D>();
-        // map_skeleton.GetComponent<BoxCollider2D>().size = Vector3.Scale(map_skeleton.GetComponent<BoxCollider2D>().size, scale_vector_down);
-
         
     }
 }
