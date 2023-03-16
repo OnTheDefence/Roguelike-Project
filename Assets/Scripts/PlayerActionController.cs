@@ -20,6 +20,7 @@ public class PlayerActionController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.drag = 10;
     }
 
     void FixedUpdate()

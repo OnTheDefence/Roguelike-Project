@@ -6,6 +6,7 @@ public class CreateGenerativeGraph : MonoBehaviour
 {
     public long seed;
     public int[] seed_arr;
+    [SerializeField] GameObject gameController;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +19,9 @@ public class CreateGenerativeGraph : MonoBehaviour
         }
 
         Generate_Graph(seed_arr);
+
+        //Activate the Game Controller once the graph is generated
+        gameController.SetActive(true);
     }
 
     long Generate_Seed(){
