@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class PlayerActionController : MonoBehaviour
 {
-    private float moveSpeed = 1.5f;
-    private float rollSpeed = 1500f;
-    private float rollCooldownTime = 2f;
+    [SerializeField] public float moveSpeed = 1.5f;
+    [SerializeField] private float rollSpeed = 1500f;
+    [SerializeField] private float rollCooldownTime = 2f;
+    [SerializeField] private float shootCooldownTime = 0.75f;
     private bool canRoll = true;
+    private bool canShoot = true;
+    private bool isRolling = false;
     private Rigidbody2D rb;
+    private SpriteRenderer sr;
     private Vector2 moveDirection;
 
     private State state;
@@ -20,6 +24,7 @@ public class PlayerActionController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
         rb.drag = 10;
     }
 
@@ -29,6 +34,7 @@ public class PlayerActionController : MonoBehaviour
             case State.Normal:
                 HandleMovement();
                 HandleRoll();
+                HandleShooting();
                 break;
             case State.Rolling:
                 HandleRolling();
@@ -40,7 +46,6 @@ public class PlayerActionController : MonoBehaviour
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
         moveDirection = new Vector2(horizontalInput, verticalInput).normalized;
-
         rb.AddForce(moveDirection * moveSpeed, ForceMode2D.Impulse);
     }
 
@@ -48,6 +53,8 @@ public class PlayerActionController : MonoBehaviour
         if (Input.GetAxisRaw("Roll") != 0){
             if (canRoll){
                 state = State.Rolling;
+                isRolling = true;
+                sr.color = Color.cyan;
                 StartCoroutine(Roll());
             }
         } 
@@ -56,7 +63,25 @@ public class PlayerActionController : MonoBehaviour
     private void HandleRolling(){
         if (rb.velocity.magnitude <= 2){
             state = State.Normal;
+            sr.color = Color.white;
+            isRolling = false;
         }
+    }
+
+    private void HandleShooting(){
+        if (Input.GetAxisRaw("Attack") != 0){
+            if (canShoot){
+                GameObject playerAttack = Instantiate (Resources.Load ("Prefab/PlayerAttack") as GameObject);
+                playerAttack.transform.position = this.gameObject.transform.position;
+                Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);  
+                playerAttack.transform.up = (new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y)).normalized;
+                StartCoroutine(ShootCooldown());
+            }
+        }
+    }
+
+    public bool IsRolling(){
+        return this.isRolling;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -89,5 +114,13 @@ public class PlayerActionController : MonoBehaviour
         yield return new WaitForSeconds(rollCooldownTime);
 
         canRoll = true;
+    }
+
+    private IEnumerator ShootCooldown(){
+        canShoot = false;
+
+        yield return new WaitForSeconds(shootCooldownTime);
+
+        canShoot = true;
     }
 }

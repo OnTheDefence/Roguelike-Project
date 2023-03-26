@@ -12,6 +12,7 @@ public class CreateMapSprites : MonoBehaviour
         Vector3 box_vector_size = new Vector3(1, 1, 1);
 
         GameObject sprites = Instantiate (Resources.Load ("Prefab/Sprites") as GameObject);
+        sprites.name = "Sprites";
         sprites.transform.position = current_node.transform.position + new Vector3(0,0,1);
         sprites.transform.parent = current_node.transform;
 
@@ -34,6 +35,10 @@ public class CreateMapSprites : MonoBehaviour
             north_door.AddComponent<BoxCollider2D>();
             north_door.GetComponent<BoxCollider2D>().size = box_vector_size;
             north_door.GetComponent<BoxCollider2D>().offset = new Vector3 ((float) 0,(float) 2.325, 1);
+            north_door.GetComponent<BoxCollider2D>().isTrigger = true;
+
+            north_door.AddComponent<DoorScript>();
+            north_door.GetComponent<DoorScript>().direction = "North";
 
             north_door_gate.AddComponent<BoxCollider2D>();
             north_door_gate.GetComponent<BoxCollider2D>().size = box_vector_size;
@@ -62,6 +67,10 @@ public class CreateMapSprites : MonoBehaviour
             east_door.AddComponent<BoxCollider2D>();
             east_door.GetComponent<BoxCollider2D>().size = box_vector_size;
             east_door.GetComponent<BoxCollider2D>().offset = new Vector3 ((float) 3.6,(float) 0, 1);
+            east_door.GetComponent<BoxCollider2D>().isTrigger = true;
+
+            east_door.AddComponent<DoorScript>();
+            east_door.GetComponent<DoorScript>().direction = "East";
 
             east_door_gate.AddComponent<BoxCollider2D>();
             east_door_gate.GetComponent<BoxCollider2D>().size = box_vector_size;
@@ -90,6 +99,10 @@ public class CreateMapSprites : MonoBehaviour
             south_door.AddComponent<BoxCollider2D>();
             south_door.GetComponent<BoxCollider2D>().size = box_vector_size;
             south_door.GetComponent<BoxCollider2D>().offset = new Vector3 ((float) 0,(float) -2.325, 1);
+            south_door.GetComponent<BoxCollider2D>().isTrigger = true;
+
+            south_door.AddComponent<DoorScript>();
+            south_door.GetComponent<DoorScript>().direction = "South";
 
             south_door_gate.AddComponent<BoxCollider2D>();
             south_door_gate.GetComponent<BoxCollider2D>().size = box_vector_size;
@@ -118,6 +131,10 @@ public class CreateMapSprites : MonoBehaviour
             west_door.AddComponent<BoxCollider2D>();
             west_door.GetComponent<BoxCollider2D>().size = box_vector_size;
             west_door.GetComponent<BoxCollider2D>().offset = new Vector3 ((float) -3.6,(float) 0, 1);
+            west_door.GetComponent<BoxCollider2D>().isTrigger = true;
+
+            west_door.AddComponent<DoorScript>();
+            west_door.GetComponent<DoorScript>().direction = "West";
 
             west_door_gate.AddComponent<BoxCollider2D>();
             west_door_gate.GetComponent<BoxCollider2D>().size = box_vector_size;

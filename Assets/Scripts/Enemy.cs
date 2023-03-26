@@ -5,15 +5,18 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
 
-    private int health;
+    [SerializeField] private int health;
+    [SerializeField] private int difficulty;
 
     public Enemy(int difficulty){
 
         switch(difficulty){
             case 0:
+                SetDifficulty(0);
                 SetHealth(10);
                 break;
             case 1:
+                SetDifficulty(1);
                 SetHealth(20);
                 break;
         }
@@ -25,6 +28,22 @@ public class Enemy : MonoBehaviour
 
     public void SetHealth(int health){
         this.health = health;
+    }
+
+    public void SetDifficulty(int difficulty){
+        this.difficulty = difficulty;
+    }
+
+    public int GetDifficulty(){
+        return this.difficulty;
+    }
+
+    public void Damage(int damage){
+        SetHealth(GetHealth() - damage);
+
+        if (GetHealth() <= 0){
+            Die();
+        }
     }
 
     public void Die(){
