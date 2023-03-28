@@ -8,13 +8,14 @@ public class PlayerActionController : MonoBehaviour
     [SerializeField] private float rollSpeed = 1500f;
     [SerializeField] private float rollCooldownTime = 2f;
     [SerializeField] private float shootCooldownTime = 0.75f;
-    public int shootDamage = 5;
+    [SerializeField] public int shootDamage = 5;
     private bool canRoll = true;
     private bool canShoot = true;
     public bool isRolling = false;
     public Rigidbody2D rb;
     public SpriteRenderer sr;
     private Vector2 moveDirection;
+    private GameObject ui_controller;
 
     public State state;
     public enum State {
@@ -25,6 +26,7 @@ public class PlayerActionController : MonoBehaviour
 
     void Awake()
     {
+        ui_controller = GameObject.Find("UIController");
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         rb.drag = 10;
@@ -98,18 +100,30 @@ public class PlayerActionController : MonoBehaviour
 
     public void IncreaseDamage(){
         this.shootDamage += 2;
+        ui_controller.GetComponent<StatUI>().HandleDamageIncrease();
     }
 
     public void DecreaseDamage(){
         this.shootDamage -= 1;
+        ui_controller.GetComponent<StatUI>().HandleDamageDecrease();
+    }
+
+    public int GetDamage(){
+        return this.shootDamage;
     }
 
     public void IncreaseShootCooldown(){
         this.shootCooldownTime += 0.25f;
+        ui_controller.GetComponent<StatUI>().HandleSpeedDecrease();
+    }
+
+    public float GetShootCooldown(){
+        return this.shootCooldownTime;
     }
 
     public void DecreaseShootCooldown(){
         this.shootCooldownTime -= 0.25f;
+        ui_controller.GetComponent<StatUI>().HandleSpeedIncrease();
     }
 
     private IEnumerator Roll(){

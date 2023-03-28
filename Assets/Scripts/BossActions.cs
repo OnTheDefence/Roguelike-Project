@@ -9,7 +9,7 @@ public class BossActions : MonoBehaviour
     private Rigidbody2D rb;
     bool canRotate;
     bool canShoot;
-    float shootCooldown = 0.8f;
+    float shootCooldown = 0.5f;
     float rotateCooldown = 3f;
     
     private State state;
@@ -69,6 +69,11 @@ public class BossActions : MonoBehaviour
             EnemyOneAttack.name = "Bullet";
             EnemyOneAttack.transform.position = this.gameObject.transform.position;
             EnemyOneAttack.transform.up = directions[i];
+
+            GameObject EnemyOneAttackDiag = Instantiate (Resources.Load ("Prefab/EnemyOneAttack") as GameObject);
+            EnemyOneAttackDiag.name = "Bullet";
+            EnemyOneAttackDiag.transform.position = this.gameObject.transform.position;
+            EnemyOneAttackDiag.transform.up = Quaternion.Euler( 0, 0, 45) * directions[i];
         }
 
         

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class GameController : MonoBehaviour
@@ -9,6 +10,11 @@ public class GameController : MonoBehaviour
     private GameObject player;
     private GameObject enemies;
     private GameObject main_camera;
+    private GameObject sprites;
+    private GameObject gate;
+
+    System.Random rnd = new System.Random();
+
     [SerializeField] private bool level_clear = false;
     private string[] directions = {"north", "east", "south", "west"};
     private string[] gate_names = {"", "", "", ""};
@@ -23,6 +29,8 @@ public class GameController : MonoBehaviour
         main_camera = GameObject.Find("Main Camera");
         main_camera.transform.position = new Vector3(current_node.transform.position.x, current_node.transform.position.y, -10);
 
+        
+
         for (int i = 0; i < 4; i++){
             gate_names[i] = directions[i] + "_door_gate";
         }
@@ -32,9 +40,9 @@ public class GameController : MonoBehaviour
     void FixedUpdate()
     {
         if(enemies.transform.childCount == 0 && level_clear == false){
-            GameObject sprites = GetChildWithName(current_node, "Sprites");
+            sprites = GetChildWithName(current_node, "Sprites");
 
-            GameObject gate = null;
+            gate = null;
 
             for (int i = 0; i < 4; i++){
                 gate = GetChildWithName(sprites, gate_names[i]);
@@ -43,9 +51,38 @@ public class GameController : MonoBehaviour
                 }
             }
 
-            level_clear = true;
+            if (current_node.GetComponent<Node>().RoomCompleted() == false){
+                int potion_drop = rnd.Next(1,6);
+                if(potion_drop == 5){
+                    int potion_type = rnd.Next(0,3);
+
+                    switch(potion_type){
+                        case 0:
+                            GameObject healthUp = Instantiate(Resources.Load("Prefab/HealthUp") as GameObject);
+                            healthUp.name = "DamageUp";
+                            healthUp.transform.position = current_node.transform.position;
+                            break;
+                        case 1:
+                            GameObject damageUp = Instantiate(Resources.Load("Prefab/DamageUp") as GameObject);
+                            damageUp.name = "DamageUp";
+                            damageUp.transform.position = current_node.transform.position;
+                            break;
+                        case 2:
+                            GameObject speedUp = Instantiate(Resources.Load("Prefab/SpeedUp") as GameObject);
+                            speedUp.name = "SpeedUp";
+                            speedUp.transform.position = current_node.transform.position;
+                            break;
+                    }
+                }
+
+                level_clear = true;
+            }
 
             current_node.GetComponent<Node>().CompleteRoom();
+        }
+
+        if (current_node.GetComponent<Node>().RoomCompleted() == true && current_node.GetComponent<Node>().GetRoomType() == 9){
+            SpawnWin();
         }
     }
 
@@ -86,21 +123,19 @@ public class GameController : MonoBehaviour
         }
 
         if (current_node.GetComponent<Node>().RoomCompleted() == false && current_node.GetComponent<Node>().GetRoomType() == 4){
-            GameObject speedUp = Instantiate(Resources.Load("Prefab/SpeedUp") as GameObject);
-            speedUp.name = "SpeedUp";
-            speedUp.transform.position = current_node.transform.position;
+            //GameObject speedUp = Instantiate(Resources.Load("Prefab/SpeedUpItem") as GameObject);
+            //speedUp.name = "SpeedUp";
+            //speedUp.transform.position = current_node.transform.position;
             StartCoroutine(SetLevelFull());
         } else if (current_node.GetComponent<Node>().RoomCompleted() == false && current_node.GetComponent<Node>().GetRoomType() == 5){
-            GameObject damageUp = Instantiate(Resources.Load("Prefab/DamageUp") as GameObject);
-            damageUp.name = "DamageUp";
-            damageUp.transform.position = current_node.transform.position;
+            //GameObject damageUp = Instantiate(Resources.Load("Prefab/DamageUpItem") as GameObject);
+            //damageUp.name = "DamageUp";
+            //damageUp.transform.position = current_node.transform.position;
             StartCoroutine(SetLevelFull());
         } else if (current_node.GetComponent<Node>().RoomCompleted() == false && current_node.GetComponent<Node>().GetRoomType() == 9){
             SpawnBoss();
         } else if (current_node.GetComponent<Node>().RoomCompleted() == false && current_node.GetComponent<Node>().GetRoomType() != 0){
             SpawnEnemies(direction);
-        } else if (current_node.GetComponent<Node>().RoomCompleted() == true && current_node.GetComponent<Node>().GetRoomType() == 9){
-            SpawnWin();
         } else{
             StartCoroutine(SetLevelFull());
         }

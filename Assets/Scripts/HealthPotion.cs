@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpeedPotion : MonoBehaviour
+public class HealthPotion : MonoBehaviour
 {
-    [SerializeField] GameObject player;
+    GameObject player;
 
     void Start(){
         player = GameObject.Find("Player");
@@ -13,13 +13,13 @@ public class SpeedPotion : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col){
         if(col.gameObject.name == "Player"){
             if(player.GetComponent<Player>().GetInvSlot(0) == ""){
-                player.GetComponent<Player>().SetInvSlot(0, "Speed Potion");
+                player.GetComponent<Player>().SetInvSlot(0, "Health Potion");
                 Destroy(this.gameObject);
             } else if(player.GetComponent<Player>().GetInvSlot(1) == ""){
-                player.GetComponent<Player>().SetInvSlot(1, "Speed Potion");
+                player.GetComponent<Player>().SetInvSlot(1, "Health Potion");
                 Destroy(this.gameObject);
             } else if(player.GetComponent<Player>().GetInvSlot(2) == ""){
-                player.GetComponent<Player>().SetInvSlot(2, "Speed Potion");
+                player.GetComponent<Player>().SetInvSlot(2, "Health Potion");
                 Destroy(this.gameObject);
             }
             GameObject.Find("Inventory").GetComponent<InventoryManagement>().SetInvUI(player.GetComponent<Player>().GetInv());

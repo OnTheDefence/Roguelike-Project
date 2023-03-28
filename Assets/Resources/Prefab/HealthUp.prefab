@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4425317300146339134}
   - component: {fileID: 8510125142894716909}
   - component: {fileID: 1521941828814230711}
-  - component: {fileID: 2631852151500035248}
+  - component: {fileID: -3797498650878333327}
   m_Layer: 0
-  m_Name: DamageUp
+  m_Name: HealthUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2977d0073998c924d923a3279aca92c5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0b6b3e1f2dd292c47824d2c9dace19aa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -112,7 +112,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
   m_EdgeRadius: 0
---- !u!114 &2631852151500035248
+--- !u!114 &-3797498650878333327
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,6 +121,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1763595602590055223}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0889427cfcfa50438c2b4268f2037ac, type: 3}
+  m_Script: {fileID: 11500000, guid: 1edc03a6cd35f1f4eaada7df73dde6d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
