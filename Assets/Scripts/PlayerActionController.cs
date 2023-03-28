@@ -15,8 +15,9 @@ public class PlayerActionController : MonoBehaviour
     private SpriteRenderer sr;
     private Vector2 moveDirection;
 
-    private State state;
-    private enum State {
+    public State state;
+    public enum State {
+        Waking,
         Normal,
         Rolling,
     }
@@ -26,11 +27,15 @@ public class PlayerActionController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         rb.drag = 10;
+        state = State.Waking;
     }
 
     void FixedUpdate()
     {
         switch (state) {
+            case State.Waking:
+                StartCoroutine(WakeUp());
+                break;
             case State.Normal:
                 HandleMovement();
                 HandleRoll();
@@ -123,4 +128,12 @@ public class PlayerActionController : MonoBehaviour
 
         canShoot = true;
     }
+
+    private IEnumerator WakeUp(){
+
+        yield return new WaitForSeconds(0.8f);
+
+        state = State.Normal;
+    }
+
 }

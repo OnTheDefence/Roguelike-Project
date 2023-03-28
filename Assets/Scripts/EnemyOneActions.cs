@@ -15,6 +15,11 @@ public class EnemyOneActions : MonoBehaviour
     bool canMove;
     bool canShoot;
     
+    private State state;
+    private enum State {
+        Sleeping,
+        Awake,
+    }
 
     void Awake()
     {
@@ -29,6 +34,18 @@ public class EnemyOneActions : MonoBehaviour
 
     void FixedUpdate()
     {
+        switch (state) {
+            case State.Awake:
+                HandleMovement();
+                HandleShooting();
+                break;
+            case State.Sleeping:
+                StartCoroutine(WakeUp());
+                break;
+        }
+    }
+
+    public void HandleMovement(){
         if (canMove){
             directionToPlayerX = player.transform.position.x - this.gameObject.transform.position.x;
             directionToPlayerY = player.transform.position.y - this.gameObject.transform.position.y;
@@ -53,7 +70,9 @@ public class EnemyOneActions : MonoBehaviour
 
             StartCoroutine(Moving());
         }
+    }
 
+    public void HandleShooting(){
         if (canShoot){
             System.Random rnd = new System.Random();
             int toShoot = rnd.Next(0,25);
@@ -62,8 +81,6 @@ public class EnemyOneActions : MonoBehaviour
                 Shoot();
             }
         }
-
-
     }
 
     void Shoot(){
@@ -106,6 +123,13 @@ public class EnemyOneActions : MonoBehaviour
         if(canMove){
             canShoot = true;
         };
+    }
+
+    private IEnumerator WakeUp(){
+
+        yield return new WaitForSeconds(0.8f);
+
+        state = State.Awake;
     }
 
     void OnCollisionEnter2D(Collision2D collision)

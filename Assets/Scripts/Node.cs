@@ -27,6 +27,10 @@ public class Node : MonoBehaviour
         this.room_defeated = true;
     }
 
+    public bool RoomCompleted(){
+        return this.room_defeated;
+    }
+
     public void SetCoordinates(int x, int y){
         this.coordinates = new int[]{x,y};
     }
@@ -64,7 +68,7 @@ public class Node : MonoBehaviour
         this.assigned_seed_digit = seed_digit;
     }
 
-    public int GetAssignedSeedDigit(int seed_digit){
+    public int GetAssignedSeedDigit(){
         return this.assigned_seed_digit;
     }
 

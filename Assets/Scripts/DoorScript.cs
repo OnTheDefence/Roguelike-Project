@@ -5,7 +5,7 @@ using UnityEngine;
 public class DoorScript : MonoBehaviour
 {
     GameObject gameController;
-    public string direction = "None";
+    public string direction;
 
     void Start(){
         gameController = GameObject.Find("GameController");
