@@ -85,6 +85,7 @@ public class EnemyOneActions : MonoBehaviour
 
     void Shoot(){
         GameObject EnemyOneAttack = Instantiate (Resources.Load ("Prefab/EnemyOneAttack") as GameObject);
+        EnemyOneAttack.name = "Bullet";
         EnemyOneAttack.transform.position = this.gameObject.transform.position;
         EnemyOneAttack.transform.up = player.transform.position - EnemyOneAttack.transform.position;
         StartCoroutine(ShootCooldown());

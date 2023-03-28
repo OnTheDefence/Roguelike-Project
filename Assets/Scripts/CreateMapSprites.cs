@@ -24,7 +24,11 @@ public class CreateMapSprites : MonoBehaviour
         north_door.transform.localScale = scale_vector;
         north_door.AddComponent<SpriteRenderer>();
         if (current_node.GetComponent<Node>().GetNorthExit() != null){
-            north_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Doors_north");
+            if (current_node.GetComponent<Node>().GetNorthExit().GetComponent<Node>().GetRoomType() == 9){
+                north_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Yellow_Doors_north");
+            } else {
+                north_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Doors_north");
+            }
 
             GameObject north_door_gate = new GameObject("north_door_gate");
             north_door_gate.transform.position = sprites.transform.position;
@@ -56,7 +60,11 @@ public class CreateMapSprites : MonoBehaviour
         east_door.transform.localScale = scale_vector;
         east_door.AddComponent<SpriteRenderer>();
         if (current_node.GetComponent<Node>().GetEastExit() != null){
-            east_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Doors_east");
+            if (current_node.GetComponent<Node>().GetEastExit().GetComponent<Node>().GetRoomType() == 9){
+                east_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Yellow_Doors_east");
+            } else {
+                east_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Doors_east");
+            }
 
             GameObject east_door_gate = new GameObject("east_door_gate");
             east_door_gate.transform.position = sprites.transform.position;
@@ -88,7 +96,11 @@ public class CreateMapSprites : MonoBehaviour
         south_door.transform.localScale = scale_vector;
         south_door.AddComponent<SpriteRenderer>();
         if (current_node.GetComponent<Node>().GetSouthExit() != null){
-            south_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Doors_south");
+            if (current_node.GetComponent<Node>().GetSouthExit().GetComponent<Node>().GetRoomType() == 9){
+                south_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Yellow_Doors_south");
+            } else {
+                south_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Doors_south");
+            }
 
             GameObject south_door_gate = new GameObject("south_door_gate");
             south_door_gate.transform.position = sprites.transform.position;
@@ -120,7 +132,11 @@ public class CreateMapSprites : MonoBehaviour
         west_door.transform.localScale = scale_vector;
         west_door.AddComponent<SpriteRenderer>();
         if (current_node.GetComponent<Node>().GetWestExit() != null){
-            west_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Doors_west");
+            if (current_node.GetComponent<Node>().GetWestExit().GetComponent<Node>().GetRoomType() == 9){
+                west_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Yellow_Doors_west");
+            } else {
+                west_door.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Doors_west");
+            }
 
             GameObject west_door_gate = new GameObject("west_door_gate");
             west_door_gate.transform.position = sprites.transform.position;

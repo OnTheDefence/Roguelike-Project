@@ -8,11 +8,12 @@ public class PlayerActionController : MonoBehaviour
     [SerializeField] private float rollSpeed = 1500f;
     [SerializeField] private float rollCooldownTime = 2f;
     [SerializeField] private float shootCooldownTime = 0.75f;
+    public int shootDamage = 5;
     private bool canRoll = true;
     private bool canShoot = true;
-    private bool isRolling = false;
-    private Rigidbody2D rb;
-    private SpriteRenderer sr;
+    public bool isRolling = false;
+    public Rigidbody2D rb;
+    public SpriteRenderer sr;
     private Vector2 moveDirection;
 
     public State state;
@@ -65,7 +66,7 @@ public class PlayerActionController : MonoBehaviour
         } 
     }
 
-    private void HandleRolling(){
+    public void HandleRolling(){
         if (rb.velocity.magnitude <= 2){
             state = State.Normal;
             sr.color = Color.white;
@@ -77,6 +78,7 @@ public class PlayerActionController : MonoBehaviour
         if (Input.GetAxisRaw("Attack") != 0){
             if (canShoot){
                 GameObject playerAttack = Instantiate (Resources.Load ("Prefab/PlayerAttack") as GameObject);
+                playerAttack.name = "Bullet";
                 playerAttack.transform.position = this.gameObject.transform.position;
                 Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);  
                 playerAttack.transform.up = (new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y)).normalized;
@@ -92,6 +94,22 @@ public class PlayerActionController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         rb.velocity = Vector2.zero;
+    }
+
+    public void IncreaseDamage(){
+        this.shootDamage += 2;
+    }
+
+    public void DecreaseDamage(){
+        this.shootDamage -= 1;
+    }
+
+    public void IncreaseShootCooldown(){
+        this.shootCooldownTime += 0.25f;
+    }
+
+    public void DecreaseShootCooldown(){
+        this.shootCooldownTime -= 0.25f;
     }
 
     private IEnumerator Roll(){

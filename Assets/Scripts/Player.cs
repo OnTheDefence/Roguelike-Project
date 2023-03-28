@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] float health;
 
     public void Awake(){
-        SetHealth(10);
+        SetHealth(15);
     }
 
     public void SetHealth(float health){
@@ -31,6 +32,6 @@ public class Player : MonoBehaviour
     }
 
     private void Die(){
-        Debug.Log("You Died");
+        SceneManager.LoadScene("EndDied");
     }
 }

@@ -71,10 +71,15 @@ public class CreateGenerativeGraph : MonoBehaviour
         map[9,9] = start_node;
 
         start_node.GetComponent<Node>().SetCoordinates(9,9);
+        start_node.GetComponent<Node>().SetRoomType(0);
 
 
         for(int i = 0; i < seed.Length; i++){
             nodes = CreateConnectedNodes(nodes[0], seed, i, nodes, all_nodes, map);
+        }
+
+        for (int i = 0; i < nodes.Count; i++){
+            nodes[i].GetComponent<Node>().SetRoomType(0);
         }
 
         for(int i = 0; i < all_nodes.Count; i++){
@@ -273,6 +278,9 @@ public class CreateGenerativeGraph : MonoBehaviour
             }
 
         } 
+        else if (seed_digit == (seed.Length - 1)){
+            current_node.GetComponent<Node>().SetRoomType(9);
+        }
         else if(seed_digit == 0){
 
              current_node.GetComponent<Node>().SetRoomType(0);
@@ -455,10 +463,6 @@ public class CreateGenerativeGraph : MonoBehaviour
         }
 
         current_node.GetComponent<Node>().SetAssignedSeedDigit(seed[seed_digit]);
-
-        if (seed_digit == (seed.Length - 1)){
-            current_node.GetComponent<Node>().SetRoomType(9);
-        }
 
         nodes.RemoveAt(0);
 

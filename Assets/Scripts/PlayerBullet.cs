@@ -11,12 +11,12 @@ public class PlayerBullet : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col){
-        if (col.gameObject.name == "Enemy"){
-            col.gameObject.GetComponent<Enemy>().Damage(5);
+        if (col.gameObject.name == "Enemy" || col.gameObject.name == "Boss"){
+            col.gameObject.GetComponent<Enemy>().Damage(GameObject.Find("Player").GetComponent<PlayerActionController>().shootDamage);
             Destroy(this.gameObject);
         }
         else{
-            if(col.gameObject.name != "Player"){
+            if(col.gameObject.name != "Player" && col.gameObject.name != "Bullet"){
                 Destroy(this.gameObject);
             }
         }

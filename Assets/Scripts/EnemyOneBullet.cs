@@ -18,7 +18,7 @@ public class EnemyOneBullet : MonoBehaviour
             }
         }
         else{
-            if(col.gameObject.name != "Enemy"){
+            if(col.gameObject.name != "Enemy" && col.gameObject.name != "Boss" && col.gameObject.name != "Bullet"){
                 Destroy(this.gameObject);
             }
         }

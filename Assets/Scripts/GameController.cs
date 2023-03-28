@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
     private GameObject current_node;
     private GameObject player;
     private GameObject enemies;
-    private GameObject camera;
+    private GameObject main_camera;
     [SerializeField] private bool level_clear = false;
     private string[] directions = {"north", "east", "south", "west"};
     private string[] gate_names = {"", "", "", ""};
@@ -20,8 +20,8 @@ public class GameController : MonoBehaviour
         player = GameObject.Find("Player");
         current_node = GameObject.Find("Start Node");
         enemies = GameObject.Find("Enemies");
-        camera = GameObject.Find("Main Camera");
-        camera.transform.position = new Vector3(current_node.transform.position.x, current_node.transform.position.y, -10);
+        main_camera = GameObject.Find("Main Camera");
+        main_camera.transform.position = new Vector3(current_node.transform.position.x, current_node.transform.position.y, -10);
 
         for (int i = 0; i < 4; i++){
             gate_names[i] = directions[i] + "_door_gate";
@@ -51,6 +51,13 @@ public class GameController : MonoBehaviour
 
 
     public void TransportPlayer(string direction){
+
+        if (player.GetComponent<PlayerActionController>().IsRolling()){
+            player.GetComponent<PlayerActionController>().state = PlayerActionController.State.Normal;
+            player.GetComponent<PlayerActionController>().sr.color = Color.white;
+            player.GetComponent<PlayerActionController>().isRolling = false;
+            player.GetComponent<PlayerActionController>().rb.velocity = new Vector2(0, 0);
+        }
         
         if (GetChildWithName(current_node, direction) != null){
             current_node = GetChildWithName(current_node, direction);
@@ -58,7 +65,7 @@ public class GameController : MonoBehaviour
             current_node = current_node.transform.parent.gameObject;
         }
         
-        camera.transform.position = new Vector3(current_node.transform.position.x, current_node.transform.position.y, -10);
+        main_camera.transform.position = new Vector3(current_node.transform.position.x, current_node.transform.position.y, -10);
         enemies.transform.position = current_node.transform.position;
         float x_offset = 4f;
         float y_offset = 2.3f;
@@ -78,8 +85,24 @@ public class GameController : MonoBehaviour
                 break;
         }
 
-        if (current_node.GetComponent<Node>().RoomCompleted() == false){
+        if (current_node.GetComponent<Node>().RoomCompleted() == false && current_node.GetComponent<Node>().GetRoomType() == 4){
+            GameObject speedUp = Instantiate(Resources.Load("Prefab/SpeedUp") as GameObject);
+            speedUp.name = "SpeedUp";
+            speedUp.transform.position = current_node.transform.position;
+            StartCoroutine(SetLevelFull());
+        } else if (current_node.GetComponent<Node>().RoomCompleted() == false && current_node.GetComponent<Node>().GetRoomType() == 5){
+            GameObject damageUp = Instantiate(Resources.Load("Prefab/DamageUp") as GameObject);
+            damageUp.name = "DamageUp";
+            damageUp.transform.position = current_node.transform.position;
+            StartCoroutine(SetLevelFull());
+        } else if (current_node.GetComponent<Node>().RoomCompleted() == false && current_node.GetComponent<Node>().GetRoomType() == 9){
+            SpawnBoss();
+        } else if (current_node.GetComponent<Node>().RoomCompleted() == false && current_node.GetComponent<Node>().GetRoomType() != 0){
             SpawnEnemies(direction);
+        } else if (current_node.GetComponent<Node>().RoomCompleted() == true && current_node.GetComponent<Node>().GetRoomType() == 9){
+            SpawnWin();
+        } else{
+            StartCoroutine(SetLevelFull());
         }
 
         player.GetComponent<PlayerActionController>().state = PlayerActionController.State.Waking;
@@ -95,24 +118,24 @@ public class GameController : MonoBehaviour
 
         switch (entry_direction){
             case "North":
-                enemy_spawn_spot[1,0] = false;
-                enemy_pos_x = 1;
-                enemy_pos_y = 0;
-                break;
-            case "East":
-                enemy_spawn_spot[2,1] = false;
-                enemy_pos_x = 2;
+                enemy_spawn_spot[0,1] = false;
+                enemy_pos_x = 0;
                 enemy_pos_y = 1;
                 break;
-            case "South":
+            case "East":
                 enemy_spawn_spot[1,2] = false;
                 enemy_pos_x = 1;
                 enemy_pos_y = 2;
                 break;
-            case "West":
-                enemy_spawn_spot[0,1] = false;
-                enemy_pos_x = 0;
+            case "South":
+                enemy_spawn_spot[2,1] = false;
+                enemy_pos_x = 2;
                 enemy_pos_y = 1;
+                break;
+            case "West":
+                enemy_spawn_spot[1,0] = false;
+                enemy_pos_x = 1;
+                enemy_pos_y = 0;
                 break;
         }
 
@@ -124,20 +147,18 @@ public class GameController : MonoBehaviour
 
         List<Vector3> spawns = new List<Vector3>();
 
-        List<GameObject> spawning_enemies = new List<GameObject>();
 
         for (int i = 0; i < number_of_enemies; i++){
             while (enemy_spawn_spot[enemy_pos_x, enemy_pos_y] == false){
                 System.Random rnd = new System.Random();
                 enemy_pos_x = rnd.Next(0, 3);
                 enemy_pos_y = rnd.Next(0, 3);
-
-                float pos_x = current_node.transform.position.x + spawn_locations[enemy_pos_x, enemy_pos_y].x;
-                float pos_y = current_node.transform.position.y + spawn_locations[enemy_pos_x, enemy_pos_y].y;
-
-                spawns.Add(new Vector3(pos_x, pos_y, 0));
             }
 
+            float pos_x = current_node.transform.position.x + spawn_locations[enemy_pos_x, enemy_pos_y].x;
+            float pos_y = current_node.transform.position.y + spawn_locations[enemy_pos_x, enemy_pos_y].y;
+
+            spawns.Add(new Vector3(pos_x, pos_y, 0));
             enemy_spawn_spot[enemy_pos_x, enemy_pos_y] = false;
         }
 
@@ -146,10 +167,8 @@ public class GameController : MonoBehaviour
             enemy.name = "Enemy";
             enemy.transform.parent = enemies.transform;
 
-            
             enemy.transform.position = spawns[i];
 
-            spawning_enemies.Add(enemy);
         }
 
         StartCoroutine(SetLevelFull());
@@ -186,6 +205,28 @@ public class GameController : MonoBehaviour
                                    {(Vector3)output[6], (Vector3)output[7], (Vector3)output[8]},};
 
         return output_array;
+    }
+
+
+    public void SpawnBoss(){
+        GameObject boss = Instantiate(Resources.Load("Prefab/Boss") as GameObject);
+        boss.name = "Boss";
+        boss.transform.parent = enemies.transform;
+        boss.transform.position = current_node.transform.position;
+
+        StartCoroutine(SetLevelFull());
+    }
+
+    public void SpawnWin(){
+        GameObject win = Instantiate(Resources.Load("Prefab/EndGame") as GameObject);
+        win.name = "Win Chest";
+        win.transform.parent = enemies.transform;
+        win.transform.position = current_node.transform.position;
+    }
+
+
+    public GameObject GetCurrentNode(){
+        return this.current_node;
     }
 
 
