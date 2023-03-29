@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     private GameObject main_camera;
     private GameObject sprites;
     private GameObject gate;
+    [SerializeField] GameObject menu;
 
     System.Random rnd = new System.Random();
 
@@ -19,6 +20,9 @@ public class GameController : MonoBehaviour
     private string[] directions = {"north", "east", "south", "west"};
     private string[] gate_names = {"", "", "", ""};
     private bool[,] enemy_spawn_spot = {{true,true,true},{true,true,true},{true,true,true}};
+
+    private bool menu_on = false;
+    private bool menu_pause_open = false;
 
     
     void Awake()
@@ -28,6 +32,7 @@ public class GameController : MonoBehaviour
         enemies = GameObject.Find("Enemies");
         main_camera = GameObject.Find("Main Camera");
         main_camera.transform.position = new Vector3(current_node.transform.position.x, current_node.transform.position.y, -10);
+        menu.SetActive(false);
 
         
 
@@ -36,7 +41,16 @@ public class GameController : MonoBehaviour
         }
     }
 
-    
+    void Update(){
+        if (Input.GetAxisRaw("Menu") != 0 && menu_pause_open == false){
+            if (menu_on){
+                CloseMenu();
+            } else{
+                OpenMenu();
+            }
+        }
+    }
+
     void FixedUpdate()
     {
         if(enemies.transform.childCount == 0 && level_clear == false){
@@ -84,6 +98,22 @@ public class GameController : MonoBehaviour
         if (current_node.GetComponent<Node>().RoomCompleted() == true && current_node.GetComponent<Node>().GetRoomType() == 9){
             SpawnWin();
         }
+    }
+
+    public void OpenMenu(){
+        Time.timeScale = 0;
+        menu_on = true;
+        menu_pause_open = true;
+        menu.SetActive(true);
+        StartCoroutine(MenuOpenPause());
+    }
+
+    public void CloseMenu(){
+        Time.timeScale = 1;
+        menu_on = false;
+        menu_pause_open = true;
+        menu.SetActive(false);
+        StartCoroutine(MenuOpenPause());
     }
 
 
@@ -281,6 +311,12 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(2);
 
         level_clear = false;
+    }
+
+    private IEnumerator MenuOpenPause(){
+        yield return new WaitForSecondsRealtime(0.25f);
+
+        menu_pause_open = false;
     }
 
 }

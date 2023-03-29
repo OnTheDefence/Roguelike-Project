@@ -953,7 +953,7 @@ TextureImporter:
         width: 7
         height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -974,7 +974,7 @@ TextureImporter:
         width: 7
         height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -982,6 +982,27 @@ TextureImporter:
       bones: []
       spriteID: b24fa2e6e02acc94aa2695fd47c898c2
       internalID: 1811481007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: menu_icon
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 448
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ffba050b22a13b45b92230669166096
+      internalID: 479227522
       vertices: []
       indices: 
       edges: []
@@ -997,47 +1018,48 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Slot_4: -2026665756
       Button_Centre_Clicked: 695126619
       Fill_Bar_Empty_Left_1: 995311594
       Fill_Bar_Empty_Right_1: 1308819804
       Red_Rounded_Health_Right: 1813890228
-      Button_Centre_Not_Selected: 1173116076
       Slot_1: 961393953
-      Fill_Bar_Empty_Right_2: 485322315
       Slot_7: -704382647
       Button_Left_Selected: -1491076864
-      Button_Left_Not_Selected: 1841920948
       Fill_Bar_Empty_Centre_1: -1360716921
-      Red_Rounded_Health_Centre: -179668119
-      Button_Right_Selected: 1458304108
-      Slot_2: 1633160087
-      Slot_3: 1071554838
-      Small_Frame_Bottom_Centre: 1493251222
-      Small_Frame_Bottom_Right: -148442577
-      Slot_5: -2063754450
       Blue_Rounded_Speed_Centre: -9625010
+      Button_Right_Selected: 1458304108
+      Slot_3: 1071554838
+      Small_Frame_Bottom_Right: -148442577
       Icon Button: -1698032289
+      menu_icon: 479227522
       Button_Right_Not_Selected: 60867932
-      Small_Frame_Top_Left: 1990677962
+      Fill_Bar_Empty_Centre_2: -2045391257
       Fill_Bar_Empty_Left_2: -188775566
       Small_Frame_Top_Middle: 800846202
-      Fill_Bar_Empty_Centre_2: -2045391257
-      Yellow_Rounded_Damage_Centre: 1811481007
-      small_clicked_button: -122902573
-      Red_Round_Button: -1032079032
       Small_Frame_Middle_Left: -2104028311
-      Small_Frame_Top_Right: 1342851172
       Red_Rounded_Health_Left: 1705880941
       Small_Frame_Middle_Right: 431433926
       Small_Frame_Bottom_Left: -699318257
       Save_Icon: 941475157
-      Slot_9: -1166290021
-      Slot_6: 1162231997
       Slot_8: 2027479982
       Button_Centre_Selected: -1918776872
       Button_Left_Clicked: -2015901646
       Button_Right_Clicked: 2066159103
+      Slot_4: -2026665756
+      Button_Centre_Not_Selected: 1173116076
+      Fill_Bar_Empty_Right_2: 485322315
+      Button_Left_Not_Selected: 1841920948
+      Red_Rounded_Health_Centre: -179668119
+      Slot_2: 1633160087
+      Small_Frame_Bottom_Centre: 1493251222
+      Slot_5: -2063754450
+      Small_Frame_Top_Left: 1990677962
+      Yellow_Rounded_Damage_Centre: 1811481007
+      small_clicked_button: -122902573
+      Red_Round_Button: -1032079032
+      Small_Frame_Top_Right: 1342851172
+      Slot_9: -1166290021
+      Slot_6: 1162231997
       Small_Frame_Middle_Centre: 243667179
   spritePackingTag: 
   pSDRemoveMatte: 0
