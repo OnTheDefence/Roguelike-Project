@@ -46,6 +46,12 @@ public class InventoryManagement : MonoBehaviour
                 player.GetComponent<PlayerActionController>().IncreaseShootCooldown();
                 player.GetComponent<PlayerActionController>().IncreaseDamage();
                 break;
+            case "Damage Item":
+                player.GetComponent<PlayerActionController>().IncreaseDamage();
+                break;
+            case "Speed Item":
+                player.GetComponent<PlayerActionController>().DecreaseShootCooldown();
+                break;
         }
 
         SetInvUI(player.GetComponent<Player>().GetInv());

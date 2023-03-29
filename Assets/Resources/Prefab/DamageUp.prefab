@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4425317300146339134}
   - component: {fileID: 8510125142894716909}
   - component: {fileID: 1521941828814230711}
+  - component: {fileID: 3521168043551721919}
   - component: {fileID: 2631852151500035248}
   m_Layer: 0
   m_Name: DamageUp
@@ -112,6 +113,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
   m_EdgeRadius: 0
+--- !u!114 &3521168043551721919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1763595602590055223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53dced23c1ea4d649b345aa7062e45b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2631852151500035248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,3 +137,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0889427cfcfa50438c2b4268f2037ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}

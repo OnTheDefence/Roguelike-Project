@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour
                 }
             }
 
-            if (current_node.GetComponent<Node>().RoomCompleted() == false){
+            if (current_node.GetComponent<Node>().RoomCompleted() == false && current_node.name != "Start Node"){
                 int potion_drop = rnd.Next(1,6);
                 if(potion_drop == 5){
                     int potion_type = rnd.Next(0,3);
@@ -123,14 +123,14 @@ public class GameController : MonoBehaviour
         }
 
         if (current_node.GetComponent<Node>().RoomCompleted() == false && current_node.GetComponent<Node>().GetRoomType() == 4){
-            //GameObject speedUp = Instantiate(Resources.Load("Prefab/SpeedUpItem") as GameObject);
-            //speedUp.name = "SpeedUp";
-            //speedUp.transform.position = current_node.transform.position;
+            GameObject speedUp = Instantiate(Resources.Load("Prefab/SpeedUpItem") as GameObject);
+            speedUp.name = "SpeedUp";
+            speedUp.transform.position = current_node.transform.position;
             StartCoroutine(SetLevelFull());
         } else if (current_node.GetComponent<Node>().RoomCompleted() == false && current_node.GetComponent<Node>().GetRoomType() == 5){
-            //GameObject damageUp = Instantiate(Resources.Load("Prefab/DamageUpItem") as GameObject);
-            //damageUp.name = "DamageUp";
-            //damageUp.transform.position = current_node.transform.position;
+            GameObject damageUp = Instantiate(Resources.Load("Prefab/DamageUpItem") as GameObject);
+            damageUp.name = "DamageUp";
+            damageUp.transform.position = current_node.transform.position;
             StartCoroutine(SetLevelFull());
         } else if (current_node.GetComponent<Node>().RoomCompleted() == false && current_node.GetComponent<Node>().GetRoomType() == 9){
             SpawnBoss();

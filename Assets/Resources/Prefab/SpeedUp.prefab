@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7962740461525801333}
   - component: {fileID: 2734456122879558566}
   - component: {fileID: 5113752603372237052}
+  - component: {fileID: -7304296416103403018}
   - component: {fileID: 1230408371988497810}
   m_Layer: 0
   m_Name: SpeedUp
@@ -112,6 +113,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
   m_EdgeRadius: 0
+--- !u!114 &-7304296416103403018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5445195250281668476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53dced23c1ea4d649b345aa7062e45b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1230408371988497810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,3 +137,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce97d2a34c90381458858cbc32b2aea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
